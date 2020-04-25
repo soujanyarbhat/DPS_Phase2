@@ -31,10 +31,10 @@ object HotzoneAnalysis {
 
     // YOU NEED TO CHANGE THIS PART
 
-    val countDataframe = joinDf.groupBy("rectangle").count().sort("rectangle").coalesce(1)
+    val finalDf = joinDf.groupBy("rectangle").count().sort("rectangle").coalesce(1)
 
-    countDataframe.show()
-    return countDataframe // YOU NEED TO CHANGE THIS PART
+    finalDf.show()
+    return finalDf // YOU NEED TO CHANGE THIS PART
   }
 
 }
