@@ -52,12 +52,7 @@ def runHotcellAnalysis(spark: SparkSession, pointPath: String): DataFrame =
 
   val standardDeviation = scala.math.sqrt((selectedHotCells.withColumn("squaredhotCell", pow(col("hotCells"), 2)).select("squaredhotCell").agg(sum("squaredhotCell")).first().getDouble(0) / numCells) - scala.math.pow(mean, 2))
 
-  var adjacentCells = spark.sql("select hotCellTable_1.x as x, hotCellTable_1.y as y, hotCellTable_1.z as z, "
-        + "sum(hotCellTable_2.hotCells) as noCell "
-        + "from selectedHotCells as hotCellTable_1, selectedHotCells as hotCellTable_2 "
-        + "where (hotCellTable_2.y = hotCellTable_1.y+1 or hotCellTable_2.y = hotCellTable_1.y or hotCellTable_2.y = hotCellTable_1.y-1) and (hotCellTable_2.x = hotCellTable_1.x+1 or hotCellTable_2.x = hotCellTable_1.x or hotCellTable_2.x = hotCellTable_1.x-1) and (hotCellTable_2.z = hotCellTable_1.z+1 or hotCellTable_2.z = hotCellTable_1.z or hotCellTable_2.z = hotCellTable_1.z-1)"
-        + "group by hotCellTable_1.z, hotCellTable_1.y, hotCellTable_1.x "
-        + "order by hotCellTable_1.z, hotCellTable_1.y, hotCellTable_1.x" )
+  var adjacentCells = spark.sql("select hotCellTable_1.x as x, hotCellTable_1.y as y, hotCellTable_1.z as z, " + "sum(hotCellTable_2.hotCells) as noCell " + "from selectedHotCells as hotCellTable_1, selectedHotCells as hotCellTable_2 " + "where (hotCellTable_2.y = hotCellTable_1.y+1 or hotCellTable_2.y = hotCellTable_1.y or hotCellTable_2.y = hotCellTable_1.y-1) and (hotCellTable_2.x = hotCellTable_1.x+1 or hotCellTable_2.x = hotCellTable_1.x or hotCellTable_2.x = hotCellTable_1.x-1) and (hotCellTable_2.z = hotCellTable_1.z+1 or hotCellTable_2.z = hotCellTable_1.z or hotCellTable_2.z = hotCellTable_1.z-1)" + "group by hotCellTable_1.z, hotCellTable_1.y, hotCellTable_1.x " + "order by hotCellTable_1.z, hotCellTable_1.y, hotCellTable_1.x" )
 
 
   var adjCellNum = udf((inputX: Int, inputY: Int, inputZ: Int, minX: Int, minY: Int, minZ: Int, maxX: Int, maxY: Int, maxZ: Int) => HotcellUtils.calcAdjHotCell(inputX, inputY, inputZ, minX, minY, minZ, maxX, maxY, maxZ))
