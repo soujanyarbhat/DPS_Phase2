@@ -48,4 +48,33 @@ object HotcellUtils {
   }
 
   // YOU NEED TO CHANGE THIS PART
-}
+  def calcAdjHotCell (minX: Int, minY: Int, minZ: Int, maxX: Int, maxY: Int, maxZ: Int, inputX: Int, inputY: Int, inputZ: Int): Int =
+  {
+    var counter = 0
+
+        // Cell is on X-boundary
+        if (inputX == minX || inputX == maxX) {
+            counter += 1
+        }
+        // Cell is on X-boundary and Y-boundary
+        if (inputY == minY || inputY == maxY) {
+            counter += 1
+        }
+        // Cell is on X-boundary, Y-boundary, and Z-boundary
+        if (inputZ == minZ || inputZ == maxZ) {
+            counter += 1
+        }
+
+        counter match {
+            case 1 => 18
+            case 2 => 12
+            case 3 => 8
+            case _ => 27
+        }
+  }
+
+  def calculateGscore(numCells: Int, x: Int, y: Int, z: Int, adjacent_hot_cell: Int, noCell: Int , mean: Double, standardDeviation: Double): Double =
+  {
+    return (noCell.toDouble - (mean * adjacent_hot_cell.toDouble)) / (standardDeviation * math.sqrt((( adjacent_hot_cell.toDouble * numCells.toDouble) - (adjacent_hot_cell.toDouble * adjacent_hot_cell.toDouble)) / (numCells.toDouble - 1.0)))
+  }
+  }
